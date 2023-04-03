@@ -1,2 +1,2 @@
 # SimpleKeyMouseListener
-This meant to test input devices.
+This thing is used to test input devices.
