@@ -20,3 +20,4 @@ This thing is used to test input devices.
 - ICH = Int Key Char
 - L = Key Location
 - ECO = Extended Key Code
+- BT = Button

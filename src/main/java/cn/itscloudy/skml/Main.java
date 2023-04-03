@@ -67,12 +67,12 @@ public class Main {
                 StringBuilder sb = new StringBuilder("<html>");
                 appendModifiers(e, sb);
                 char keyChar = e.getKeyChar();
-                sb.append("CO:").append(e.getKeyCode())
-                        .append(":CH:").append((keyChar >= 0x20 && keyChar <= 0x7E) ?
-                                keyChar : "<span style=\"color:orange\">?</span>")
-                        .append(":ICH:").append((int)keyChar)
-                        .append(":L:").append(e.getKeyLocation())
-                        .append(":ECO:").append(e.getExtendedKeyCode());
+                sb.append(grayKey(" CO:")).append(e.getKeyCode())
+                        .append(grayKey(" CH:")).append((keyChar >= 0x20 && keyChar <= 0x7E) ?
+                                keyChar : htmlStyle("?", "color:orange"))
+                        .append(grayKey(" ICH:")).append((int) keyChar)
+                        .append(grayKey(" L:")).append(e.getKeyLocation())
+                        .append(grayKey(" ECO:")).append(e.getExtendedKeyCode());
                 sb.append("</html>");
                 keyStatus.setText(sb.toString());
             }
@@ -84,7 +84,7 @@ public class Main {
                 StringBuilder sb = new StringBuilder("<html>");
                 appendModifiers(e, sb);
                 int button = e.getButton();
-                sb.append("BT:").append(button);
+                sb.append(grayKey(" BT:")).append(button);
                 sb.append("</html>");
                 mouseStatus.setText(sb.toString());
             }
@@ -129,6 +129,13 @@ public class Main {
         frame.setVisible(true);
     }
 
+    private static String grayKey(String key) {
+        return htmlStyle(key, "color:#555555");
+    }
+    private static String htmlStyle(String key, String style) {
+        return "<span style=\"" + style + "\">" + key + "</span>";
+    }
+
     private static void appendModifiers(InputEvent e, StringBuilder sb) {
         int i = sb.length();
         if (e.isMetaDown()) {
@@ -148,7 +155,7 @@ public class Main {
         }
         if (sb.length() > 0) {
             sb.insert(i, "<span style=\"color:red\">");
-            sb.append("</span> ");
+            sb.append("</span>");
         }
     }
 }
