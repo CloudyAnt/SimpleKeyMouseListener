@@ -26,7 +26,6 @@ public class Main {
         focusLabel.setBounds(0, 0, 10, height);
         focusLabel.setBackground(Color.RED);
         // KEY STATUS
-        LineBorder lineBorder = new LineBorder(Color.LIGHT_GRAY, 1);
         Font labelFont = new Font("Default", Font.PLAIN, 14);
         Font borderFont = new Font("Default", Font.PLAIN, 12);
 
@@ -35,7 +34,8 @@ public class Main {
         keyStatus.setFont(labelFont);
         keyStatus.setOpaque(true);
         keyStatus.setBounds(10, 0, 330, height);
-        TitledBorder keyTitle = new TitledBorder(lineBorder, "Key Input");
+        LineBorder keyBoard = new LineBorder(Color.YELLOW, 1);
+        TitledBorder keyTitle = new TitledBorder(keyBoard, "Key Input");
         keyTitle.setTitleFont(borderFont);
         keyTitle.setTitleColor(Color.DARK_GRAY);
         keyStatus.setBorder(keyTitle);
@@ -45,7 +45,8 @@ public class Main {
         mouseStatus.setFont(labelFont);
         mouseStatus.setOpaque(true);
         mouseStatus.setBounds(340, 0, 110, height);
-        TitledBorder mouseTitle = new TitledBorder(lineBorder, "Mouse Input");
+        LineBorder mouseBoard = new LineBorder(Color.CYAN, 1);
+        TitledBorder mouseTitle = new TitledBorder(mouseBoard, "Mouse Input");
         mouseTitle.setTitleFont(borderFont);
         mouseTitle.setTitleColor(Color.DARK_GRAY);
         mouseStatus.setBorder(mouseTitle);
@@ -120,8 +121,6 @@ public class Main {
         // Drag
         Dragger.drag(frame, focusLabel, keyStatus, mouseStatus);
         // FRAME
-        keyStatus.setFocusable(false);
-        mouseStatus.setFocusable(false);
         frame.add(focusLabel);
         frame.add(keyStatus);
         frame.add(mouseStatus);
