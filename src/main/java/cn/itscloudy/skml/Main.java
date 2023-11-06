@@ -9,21 +9,17 @@ import java.awt.event.*;
 public class Main {
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame();
         int height = 50;
 
-        frame.setBounds(500, 500, 500, height);
-        frame.setResizable(false);
-        frame.setUndecorated(true);
-        frame.setLayout(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // >>>
         // FOCUS BUTTON
         JLabel focusLabel = new JLabel();
         focusLabel.setBackground(Color.BLUE);
         focusLabel.setOpaque(true);
         focusLabel.setFont(new Font("Default", Font.BOLD, 12));
-        focusLabel.setBounds(0, 0, 10, height);
+        int focusLabelWidth = 10;
+        focusLabel.setBounds(0, 0, focusLabelWidth, height);
+        int widthSum = focusLabelWidth;
         focusLabel.setBackground(Color.RED);
         // KEY STATUS
         Font labelFont = new Font("Default", Font.PLAIN, 14);
@@ -33,7 +29,9 @@ public class Main {
         keyStatus.setBackground(new Color(200, 200, 110));
         keyStatus.setFont(labelFont);
         keyStatus.setOpaque(true);
-        keyStatus.setBounds(10, 0, 330, height);
+        int keyLabelWidth = 380;
+        keyStatus.setBounds(widthSum, 0, keyLabelWidth, height);
+        widthSum += keyLabelWidth;
         LineBorder keyBoard = new LineBorder(Color.YELLOW, 1);
         TitledBorder keyTitle = new TitledBorder(keyBoard, "Key Input");
         keyTitle.setTitleFont(borderFont);
@@ -44,7 +42,9 @@ public class Main {
         mouseStatus.setBackground(new Color(110, 200, 200));
         mouseStatus.setFont(labelFont);
         mouseStatus.setOpaque(true);
-        mouseStatus.setBounds(340, 0, 110, height);
+        int mouseLabelWidth = 110;
+        mouseStatus.setBounds(widthSum, 0, mouseLabelWidth, height);
+        widthSum += mouseLabelWidth;
         LineBorder mouseBoard = new LineBorder(Color.CYAN, 1);
         TitledBorder mouseTitle = new TitledBorder(mouseBoard, "Mouse Input");
         mouseTitle.setTitleFont(borderFont);
@@ -66,14 +66,18 @@ public class Main {
             @Override
             public void keyPressed(KeyEvent e) {
                 StringBuilder sb = new StringBuilder("<html>");
+                int oldLen = sb.length();
                 appendModifiers(e, sb);
+                if (sb.length() > oldLen) {
+                    sb.append("<br/>");
+                }
                 char keyChar = e.getKeyChar();
-                sb.append(grayKey(" CO:")).append(e.getKeyCode())
-                        .append(grayKey(" CH:")).append((keyChar >= 0x20 && keyChar <= 0x7E) ?
+                sb.append(grayKey(" code:")).append(e.getKeyCode())
+                        .append(grayKey(" char:")).append((keyChar >= 0x20 && keyChar <= 0x7E) ?
                                 keyChar : htmlStyle("?", "color:orange"))
-                        .append(grayKey(" ICH:")).append((int) keyChar)
-                        .append(grayKey(" L:")).append(e.getKeyLocation())
-                        .append(grayKey(" ECO:")).append(e.getExtendedKeyCode());
+                        .append(grayKey(" intchar:")).append((int) keyChar)
+                        .append(grayKey(" loc:")).append(e.getKeyLocation())
+                        .append(grayKey(" extcode:")).append(e.getExtendedKeyCode());
                 sb.append("</html>");
                 keyStatus.setText(sb.toString());
             }
@@ -83,9 +87,13 @@ public class Main {
             @Override
             public void mousePressed(MouseEvent e) {
                 StringBuilder sb = new StringBuilder("<html>");
+                int oldLen = sb.length();
                 appendModifiers(e, sb);
-                int button = e.getButton();
-                sb.append(grayKey(" BT:")).append(button);
+                if (sb.length() > oldLen) {
+                    sb.append("<br/>");
+                }
+                sb.append(grayKey(" BT:")).append(e.getButton());
+                sb.append(grayKey(" count:")).append(e.getClickCount());
                 sb.append("</html>");
                 mouseStatus.setText(sb.toString());
             }
@@ -97,7 +105,9 @@ public class Main {
         closeButton.setBackground(Color.LIGHT_GRAY);
         closeButton.setOpaque(true);
         closeButton.setFont(new Font("Default", Font.BOLD, 30));
-        closeButton.setBounds(450, 0, 50, height);
+        int closeButtonWidth = 50;
+        closeButton.setBounds(widthSum, 0, closeButtonWidth, height);
+        widthSum += closeButtonWidth;
         closeButton.addActionListener(actionEvent -> System.exit(0));
         closeButton.setToolTipText("Exit this program.");
         closeButton.addFocusListener(focusListener);
@@ -118,6 +128,12 @@ public class Main {
         keyStatus.addMouseListener(mouseListener);
         mouseStatus.addMouseListener(mouseListener);
         // <<<<
+        JFrame frame = new JFrame();
+        frame.setBounds(500, 500, widthSum, height);
+        frame.setResizable(false);
+        frame.setUndecorated(true);
+        frame.setLayout(null);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Drag
         Dragger.drag(frame, focusLabel, keyStatus, mouseStatus);
         // FRAME
@@ -136,7 +152,7 @@ public class Main {
     }
 
     private static void appendModifiers(InputEvent e, StringBuilder sb) {
-        int i = sb.length();
+        int oldLen = sb.length();
         if (e.isMetaDown()) {
             sb.append("M");
         }
@@ -152,8 +168,8 @@ public class Main {
         if (e.isAltGraphDown()) {
             sb.append("G");
         }
-        if (sb.length() > 0) {
-            sb.insert(i, "<span style=\"color:red\">");
+        if (sb.length() > oldLen) {
+            sb.insert(oldLen, "<span style=\"color:red\">");
             sb.append("</span>");
         }
     }
